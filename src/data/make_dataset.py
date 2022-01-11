@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-import click
-import logging
-from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
-
-import os
 import argparse
 import glob
+import logging
+import os
+from pathlib import Path
 
-import torch
-from torchvision import transforms
+import click
 import numpy as np
 import pandas as pd
+import torch
+from dotenv import find_dotenv, load_dotenv
+from torchvision import transforms
 
 
 def main():

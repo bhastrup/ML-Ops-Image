@@ -1,6 +1,6 @@
 
-from torch import nn
 import torch.nn.functional as F
+from torch import nn
 
 
 class CNN_MNIST(nn.Module):

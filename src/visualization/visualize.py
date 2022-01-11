@@ -2,16 +2,16 @@
 
 
 import argparse
-import sys
-import os
-
 import glob
+import os
+import sys
+
 import numpy as np
 import pandas as pd
 import torch
-from torch import optim, nn
+from torch import nn, optim
 
-from src.models.model import CNN_MNIST, CNN_MNIST_STRIDE, CNN_MNIST_DILATION
+from src.models.model import CNN_MNIST, CNN_MNIST_DILATION, CNN_MNIST_STRIDE
 
 
 def predict(model, images):
