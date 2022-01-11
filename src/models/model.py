@@ -27,7 +27,10 @@ class CNN_MNIST(nn.Module):
         self.output_layer = nn.Linear(16 * 7 * 7, 10)
 
     def forward(self, x):
-        x = x.unsqueeze(1)
+        if len(x.shape) == 2:
+            x = x.unsqueeze(0)
+        elif len(x.shape) == 3 and x.shape[0] != 1:
+            x = x.unsqueeze(1)
 
         x = self.conv1(x)
         x = self.conv2(x)
@@ -64,7 +67,10 @@ class CNN_MNIST_STRIDE(nn.Module):
         self.output_layer = nn.Linear(16 * 7 * 7, 10)
 
     def forward(self, x):
-        x = x.unsqueeze(1)
+        if len(x.shape) == 2:
+            x = x.unsqueeze(0)
+        elif len(x.shape) == 3 and x.shape[0] != 1:
+            x = x.unsqueeze(1)
 
         x = self.conv1(x)
         x = self.conv2(x)
@@ -102,7 +108,10 @@ class CNN_MNIST_DILATION(nn.Module):
         self.output_layer = nn.Linear(16 * 6 * 6, 10)
 
     def forward(self, x):
-        x = x.unsqueeze(1)
+        if len(x.shape) == 2:
+            x = x.unsqueeze(0)
+        elif len(x.shape) == 3 and x.shape[0] != 1:
+            x = x.unsqueeze(1)
 
         x = self.conv1(x)
         x = self.conv2(x)
