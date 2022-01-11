@@ -12,13 +12,6 @@ from torch import optim, nn
 from src.models.model import CNN_MNIST, CNN_MNIST_STRIDE, CNN_MNIST_DILATION
 
 
-def get_config() -> dict:
-    parser = build_default_argparser()
-    args = parser.parse_args()
-    config = vars(args)
-    return config
-
-
 class DatasetMNIST(torch.utils.data.Dataset):
     'Characterizes a dataset for PyTorch'
     def __init__(self, all_images, all_labels):
