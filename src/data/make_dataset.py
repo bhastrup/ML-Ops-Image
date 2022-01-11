@@ -52,12 +52,12 @@ def main():
         all_labels = np.append(all_labels, data["labels"])
         print(f'finished processing {f}')
 
-
+    print(all_images.shape)
     # Define a transform to normalize the data
     transform = transforms.Compose([transforms.ToTensor(),
                                    transforms.Normalize((0.5,), (0.5,))])
 
-    all_images = torch.transpose(transform(all_images), 0, 1).numpy()
+    all_images = torch.transpose(torch.transpose(transform(all_images), 0, 1), 1, 2).numpy()
     np.savez(save_name, images=all_images, labels=all_labels, allow_pickle=data["allow_pickle"])
 
 
