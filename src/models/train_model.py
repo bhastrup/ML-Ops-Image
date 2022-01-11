@@ -9,7 +9,7 @@ import pandas as pd
 import torch
 from torch import optim, nn
 
-from src.models.model import CNN_MNIST, CNN_MNIST_STRIDE
+from src.models.model import CNN_MNIST, CNN_MNIST_STRIDE, CNN_MNIST_DILATION
 
 
 def get_config() -> dict:
@@ -89,6 +89,8 @@ class TrainOREvaluate(object):
             model = CNN_MNIST().float()
         elif self.model_name == 'CNN_MNIST_STRIDE':
             model = CNN_MNIST_STRIDE().float()
+        elif self.model_name == 'CNN_MNIST_DILATION':
+            model = CNN_MNIST_DILATION().float()
 
         train_set = load_mnist_dataset(self.LOAD_DATA_DIR, "train")
         trainloader = torch.utils.data.DataLoader(train_set, batch_size=16, shuffle=True)

@@ -32,7 +32,7 @@ data: requirements
 ## Train model
 train: requirements
 	$(PYTHON_INTERPRETER) src/models/train_model.py --command='train' --LOAD_DATA_DIR='data/processed/' \
-	--MODEL_SAVE_DIR='models/' --PLOT_SAVE_DIR='reports/figures/' --lr=0.1
+	--MODEL_SAVE_DIR='models/' --PLOT_SAVE_DIR='reports/figures/' --lr=0.1 --model_name=CNN_MNIST
 
 
 ## Delete all compiled Python files
