@@ -11,6 +11,9 @@ from torch import nn, optim
 
 from src.models.model import CNN_MNIST, CNN_MNIST_DILATION, CNN_MNIST_STRIDE
 
+import wandb
+wandb.init(project="MNIST Classifier", entity="bhastrup")
+
 
 class DatasetMNIST(torch.utils.data.Dataset):
     'Characterizes a dataset for PyTorch'
@@ -56,7 +59,7 @@ class TrainOREvaluate(object):
     """ Helper class that will help launch class methods as commands
         from a single script
     """
-    def __init__(self, command, LOAD_DATA_DIR, MODEL_SAVE_DIR, PLOT_SAVE_DIR, lr, model_name):
+    def __init__(self, command, LOAD_DATA_DIR, MODEL_SAVE_DIR, PLOT_SAVE_DIR, model_name, cfg):
 
         if not hasattr(self, command):
             print('Unrecognized command')
@@ -67,7 +70,9 @@ class TrainOREvaluate(object):
         self.LOAD_DATA_DIR = LOAD_DATA_DIR
         self.MODEL_SAVE_DIR = MODEL_SAVE_DIR
         self.PLOT_SAVE_DIR = PLOT_SAVE_DIR
-        self.lr = lr
+        self.lr = cfg["learning_rate"]
+        self.batch_size = cfg["batch_size"]
+        self.epochs = cfg["epochs"]
         self.model_name = model_name
 
         # use dispatch pattern to invoke method with same name
@@ -86,13 +91,13 @@ class TrainOREvaluate(object):
             model = CNN_MNIST_DILATION().float()
 
         train_set = load_mnist_dataset(self.LOAD_DATA_DIR, "train")
-        trainloader = torch.utils.data.DataLoader(train_set, batch_size=16, shuffle=True)
+        trainloader = torch.utils.data.DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
         criterion = nn.NLLLoss()
         optimizer = optim.Adam(model.parameters(), lr=self.lr)
 
-        epochs = 30
+
         self.df_train_loss = pd.DataFrame([], columns=["Train loss"])
-        for epoch in range(epochs):
+        for epoch in range(self.epochs):
             running_loss = 0
             for i, (images, labels) in enumerate(trainloader):
                 
@@ -103,6 +108,7 @@ class TrainOREvaluate(object):
                 optimizer.step()
                 
                 running_loss += loss.item()
+
             print("Epoch " + str(epoch) + "  Loss=" + str(round(running_loss / i, 2)))
             #print("log_ps"); print(log_ps)
             #print("Gradients:")
@@ -110,6 +116,8 @@ class TrainOREvaluate(object):
             # Save plot and model checkpoint
             self.save_to_plot(running_loss / i, epoch)
             self.save_checkpoint(model)
+            wandb.log({"loss": running_loss / i})
+            wandb.watch(model)
 
 
     def save_checkpoint(self, model):
@@ -175,4 +183,12 @@ if __name__ == '__main__':
     os.makedirs(MODEL_SAVE_DIR, exist_ok=True)
     os.makedirs(PLOT_SAVE_DIR, exist_ok=True)
 
-    TrainOREvaluate(config["command"], LOAD_DATA_DIR, MODEL_SAVE_DIR, PLOT_SAVE_DIR, config["lr"], config["model_name"])
+
+    wandb.config = {
+    "learning_rate": config["lr"],
+    "epochs": 30,
+    "batch_size": 16
+    }
+
+
+    TrainOREvaluate(config["command"], LOAD_DATA_DIR, MODEL_SAVE_DIR, PLOT_SAVE_DIR, config["model_name"], wandb.config)
