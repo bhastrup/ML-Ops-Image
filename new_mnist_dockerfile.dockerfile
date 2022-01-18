@@ -20,7 +20,8 @@ COPY requirements.txt /root/requirements.txt
 COPY setup.py /root/setup.py
 COPY src /root/src
 COPY data /root/data
-
+COPY models /root/models
+COPY reports /root/reports
 
 RUN pip install -r /root/requirements.txt --no-cache-dir
 RUN pip install -e /root/.
@@ -28,4 +29,5 @@ RUN pip install -e /root/.
 RUN wandb login 5126bc75ebb9dbf628dc84fa81ad8be26d701991 # Private account API key
 
 # Sets up the entry point to invoke the trainer.
-ENTRYPOINT ["python", "src/models/train_model.py"]
+ENTRYPOINT ["python", "src/models/train_model.py", "--command", "train", "--LOAD_DATA_DIR", "data/processed/train/", "--MODEL_SAVE_DIR", "models/cnn/", "--PLOT_SAVE_DIR", "reports/figures/cnn/", "--lr", "0.01", "--model_name", "CNN_MNIST_DILATION"]
+
