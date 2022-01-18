@@ -8,3 +8,4 @@ setuptools==60.5.0
 torch
 torchvision
 tqdm==4.62.3
+wandb

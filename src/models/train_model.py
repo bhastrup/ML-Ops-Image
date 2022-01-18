@@ -186,7 +186,7 @@ if __name__ == '__main__':
 
     wandb.config = {
     "learning_rate": config["lr"],
-    "epochs": 30,
+    "epochs": 5,
     "batch_size": 16
     }
 
